@@ -1,4 +1,5 @@
 package com.productheaven.security;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 
-public class SuccessAuthenticationHandler implements AuthenticationSuccessHandler {
+public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
@@ -52,9 +53,9 @@ public class SuccessAuthenticationHandler implements AuthenticationSuccessHandle
         }
 
         if (isUser) {
-            return "index";
+            return "/index";
         } else if (isAdmin) {
-            return "/userlist";
+            return "/list";
         } else {
             throw new IllegalStateException();
         }

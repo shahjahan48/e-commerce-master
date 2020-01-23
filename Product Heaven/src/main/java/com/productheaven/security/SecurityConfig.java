@@ -1,11 +1,9 @@
 package com.productheaven.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,8 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
@@ -43,10 +41,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
-//    @Bean
-//    public AuthenticationSuccessHandler authenticationSuccessHandler(){
-//        return new SuccessAuthenticationHandler();
-//    }
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler(){
+        return new CustomLoginSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler(){
+        return new CustomLoginFailureHandler();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -56,11 +59,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .access("hasRole('ADMIN') or hasRole('DBA')")
                 .and()
                 .formLogin().loginPage("/login")
-                .loginProcessingUrl("/login").usernameParameter("username").passwordParameter("password")
+                .loginProcessingUrl("/login")
+                .successHandler(authenticationSuccessHandler())
+                .failureHandler(authenticationFailureHandler())
+//                .usernameParameter("username").passwordParameter("password")
                 .and()
-                .rememberMe().rememberMeParameter("remember-me").tokenRepository(tokenRepository)
-                .tokenValiditySeconds(86400)
-                .and()
+//                .rememberMe().rememberMeParameter("remember-me").tokenRepository(tokenRepository)
+//                .tokenValiditySeconds(86400)
+//                .and()
                 .csrf().and().exceptionHandling().accessDeniedPage("/Access_Denied");
     }
 

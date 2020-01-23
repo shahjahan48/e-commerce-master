@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Locale;
 
 @Controller
-@SessionAttributes("roles")
 public class UserController {
     final UserService userService;
     final RoleService roleService;

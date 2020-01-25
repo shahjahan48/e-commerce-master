@@ -1,4 +1,4 @@
-package com.productheaven.generics;
+package com.productheaven.security;
 
 import com.productheaven.entities.UserRoles;
 import com.productheaven.entities.Users;

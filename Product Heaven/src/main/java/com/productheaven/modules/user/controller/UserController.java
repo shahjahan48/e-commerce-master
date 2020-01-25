@@ -6,6 +6,7 @@ import com.productheaven.modules.user.service.RoleService;
 import com.productheaven.modules.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,7 +45,8 @@ public class UserController {
     /**
      * This method will list all existing users.
      */
-    @RequestMapping(value = { "/", "/list" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/list" }, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ADMIN')")
     public String listUsers(ModelMap model) {
 
         List<Users> users = userService.findAllUsers();

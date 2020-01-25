@@ -53,7 +53,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         }
 
         if (isUser) {
-            return "/index";
+            return "/home";
         } else if (isAdmin) {
             return "/list";
         } else {

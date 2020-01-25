@@ -27,14 +27,12 @@ import javax.sql.DataSource;
 @ComponentScan({ "com.productheaven.config" })
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
-    private final PersistentTokenRepository tokenRepository;
-    private final DataSource dataSource;
+//    private final PersistentTokenRepository tokenRepository;
+//    private final DataSource dataSource;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService, PersistentTokenRepository tokenRepository, DataSource dataSource) {
+    public SecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
-        this.tokenRepository = tokenRepository;
-        this.dataSource = dataSource;
     }
 
     @Autowired
@@ -55,7 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/", "/home").permitAll()
+        http
+                .authorizeRequests()
+                .antMatchers("/", "/home").permitAll()
 //                .access("hasRole('USER') or hasRole('ADMIN') or hasRole('DBA')")
 //                .antMatchers("/newuser/**", "/delete-user-*").access("hasRole('ADMIN')").antMatchers("/edit-user-*")
 //                .access("hasRole('ADMIN') or hasRole('DBA')")

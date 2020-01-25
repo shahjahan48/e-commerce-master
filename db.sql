@@ -54,7 +54,8 @@ VALUES ('USER', 'User'),
 /* Populate one Admin User which will further create other users for the application using GUI */
 INSERT INTO users(user_name, password, email_address, is_active)
 VALUES ('shahed','$2a$10$4eqIF5s/ewJwHK1p8lqlFOEm2QIA0S8g6./Lok.pQxqcxaBZYChRm', 'shahed@gmail.com', 1),
-	('admin','$2a$10$4eqIF5s/ewJwHK1p8lqlFOEm2QIA0S8g6./Lok.pQxqcxaBZYChRm', 'admin@gmail.com', 1);
+	('admin','$2a$10$4eqIF5s/ewJwHK1p8lqlFOEm2QIA0S8g6./Lok.pQxqcxaBZYChRm', 'admin@gmail.com', 1),
+	('imran','$2a$10$4eqIF5s/ewJwHK1p8lqlFOEm2QIA0S8g6./Lok.pQxqcxaBZYChRm', 'imran@gmail.com', 1);
   
   
 /* Populate JOIN Table */

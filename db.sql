@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS product_heaven;
+
 USE `product_heaven`;
 
 CREATE TABLE `users` (

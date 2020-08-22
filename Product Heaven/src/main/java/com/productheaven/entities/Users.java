@@ -1,22 +1,26 @@
 package com.productheaven.entities;
 
+import org.hibernate.annotations.Nationalized;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.HashSet;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 public class Users {
     private long id;
-    private String userName;
+    private String username;
     private String password;
     private String emailAddress;
-    private Timestamp createdDate;
+    private Date createdDate;
     private boolean isActive;
-    private Set<UserRoles> userRoles = new HashSet<UserRoles>();
+    private Set<UserRoles> userRoles;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    @Column(name = "Id", table = "Users", nullable = false)
     public long getId() {
         return id;
     }
@@ -26,17 +30,19 @@ public class Users {
     }
 
     @Basic
-    @Column(name = "user_name", nullable = false, length = 30)
-    public String getUserName() {
-        return userName;
+    @Column(name = "Username", table = "Users", nullable = false, length = 128)
+    @Nationalized
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 100)
+    @Column(name = "Password", table = "Users", nullable = false, length = 128)
+    @Nationalized
     public String getPassword() {
         return password;
     }
@@ -46,7 +52,7 @@ public class Users {
     }
 
     @Basic
-    @Column(name = "email_address", nullable = false, length = 30)
+    @Column(name = "EmailAddress", table = "Users", nullable = false, length = 64)
     public String getEmailAddress() {
         return emailAddress;
     }
@@ -56,17 +62,18 @@ public class Users {
     }
 
     @Basic
-    @Column(name = "created_date", nullable = false)
-    public Timestamp getCreatedDate() {
+    @Column(name = "CreatedDate", table = "Users", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
     @Basic
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "IsActive", table = "Users", nullable = false)
     public boolean isActive() {
         return isActive;
     }
@@ -75,7 +82,7 @@ public class Users {
         isActive = active;
     }
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     public Set<UserRoles> getUserRoles() {
         return userRoles;
     }
@@ -83,32 +90,21 @@ public class Users {
     public void setUserRoles(Set<UserRoles> userRoles) {
         this.userRoles = userRoles;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Users users = (Users) o;
-
-        if (id != users.id) return false;
-        if (isActive != users.isActive) return false;
-        if (userName != null ? !userName.equals(users.userName) : users.userName != null) return false;
-        if (password != null ? !password.equals(users.password) : users.password != null) return false;
-        if (emailAddress != null ? !emailAddress.equals(users.emailAddress) : users.emailAddress != null) return false;
-        if (createdDate != null ? !createdDate.equals(users.createdDate) : users.createdDate != null) return false;
-
-        return true;
+        return id == users.id &&
+                isActive == users.isActive &&
+                Objects.equals(username, users.username) &&
+                Objects.equals(password, users.password) &&
+                Objects.equals(emailAddress, users.emailAddress) &&
+                Objects.equals(createdDate, users.createdDate);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (userName != null ? userName.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (emailAddress != null ? emailAddress.hashCode() : 0);
-        result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
-        result = 31 * result + (isActive ? 1 : 0);
-        return result;
+        return Objects.hash(id, username, password, emailAddress, createdDate, isActive);
     }
 }

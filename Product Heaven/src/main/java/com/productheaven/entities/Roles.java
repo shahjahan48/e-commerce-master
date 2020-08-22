@@ -1,23 +1,24 @@
 package com.productheaven.entities;
 
+import org.hibernate.annotations.Nationalized;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "roles")
 public class Roles {
     private long id;
     private String roleName;
     private String roleText;
-    private Timestamp createdDate;
-    private List<UserRoles> userRoles = new ArrayList<>();
+    private Date createdDate;
+    private Set<UserRoles> userRoles;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    @Column(name = "Id", table = "Roles", nullable = false)
     public long getId() {
         return id;
     }
@@ -27,7 +28,8 @@ public class Roles {
     }
 
     @Basic
-    @Column(name = "role_name", nullable = false, length = 30)
+    @Nationalized
+    @Column(name = "RoleName", table = "Roles", nullable = false, length = 128)
     public String getRoleName() {
         return roleName;
     }
@@ -37,7 +39,8 @@ public class Roles {
     }
 
     @Basic
-    @Column(name = "role_text", nullable = true, length = 60)
+    @Nationalized
+    @Column(name = "RoleText", table = "Roles", nullable = false, length = 128)
     public String getRoleText() {
         return roleText;
     }
@@ -47,21 +50,22 @@ public class Roles {
     }
 
     @Basic
-    @Column(name = "created_date", nullable = false)
-    public Timestamp getCreatedDate() {
+    @Column(name = "CreatedDate", table = "Roles", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
-    public List<UserRoles> getUserRoles() {
+    @OneToMany(mappedBy = "role")
+    public Set<UserRoles> getUserRoles() {
         return userRoles;
     }
 
-    public void setUserRoles(List<UserRoles> userRoles) {
+    public void setUserRoles(Set<UserRoles> userRoles) {
         this.userRoles = userRoles;
     }
 
@@ -69,23 +73,15 @@ public class Roles {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Roles roles = (Roles) o;
-
-        if (id != roles.id) return false;
-        if (roleName != null ? !roleName.equals(roles.roleName) : roles.roleName != null) return false;
-        if (roleText != null ? !roleText.equals(roles.roleText) : roles.roleText != null) return false;
-        if (createdDate != null ? !createdDate.equals(roles.createdDate) : roles.createdDate != null) return false;
-
-        return true;
+        return id == roles.id &&
+                Objects.equals(roleName, roles.roleName) &&
+                Objects.equals(roleText, roles.roleText) &&
+                Objects.equals(createdDate, roles.createdDate);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (roleName != null ? roleName.hashCode() : 0);
-        result = 31 * result + (roleText != null ? roleText.hashCode() : 0);
-        result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
-        return result;
+        return Objects.hash(id, roleName, roleText, createdDate);
     }
 }

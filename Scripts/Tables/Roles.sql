@@ -1,0 +1,17 @@
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE object_id=OBJECT_ID('Roles'))
+BEGIN
+	CREATE TABLE [dbo].Roles(
+		Id BIGINT IDENTITY(1,1) NOT NULL,
+		RoleName NVARCHAR(128) NOT NULL,
+		RoleText NVARCHAR(128) NOT NULL,
+		CreatedDate DATETIME NOT NULL,
+
+		CONSTRAINT [PK_Roles] PRIMARY KEY(Id)
+	)
+
+	INSERT INTO Roles 
+	VALUES ('ADMIN', 'Admin', GETDATE()),
+		('BRANCH ADMIN', 'Branch Admin', GETDATE()),
+		('EMPLOYEE', 'Employee', GETDATE()),
+		('MEMBER', 'Member', GETDATE())
+END

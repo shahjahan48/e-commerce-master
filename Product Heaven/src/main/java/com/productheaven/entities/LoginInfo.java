@@ -1,30 +1,44 @@
 package com.productheaven.entities;
 
+import org.hibernate.annotations.Nationalized;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "persistent_logins", schema = "product_heaven")
 public class LoginInfo {
-    private String userName;
+    private long id;
+    private String username;
     private String series;
     private String token;
     private Date lastUsed;
 
-    @Basic
-    @Column(name = "user_name", nullable = false, length = 64)
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     @Id
-    @Column(name = "series", nullable = false, length = 64)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    @Column(name = "Id", table = "LoginInfo", nullable = false)
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Basic
+    @Column(name = "Username", table = "LoginInfo", nullable = false, length = 128)
+    @Nationalized
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Basic
+    @Column(name = "Series", table = "LoginInfo", nullable = false, length = 256)
     public String getSeries() {
         return series;
     }
@@ -34,7 +48,7 @@ public class LoginInfo {
     }
 
     @Basic
-    @Column(name = "token", nullable = false, length = 64)
+    @Column(name = "Token", table = "LoginInfo", nullable = false, length = 128)
     public String getToken() {
         return token;
     }
@@ -44,7 +58,7 @@ public class LoginInfo {
     }
 
     @Basic
-    @Column(name = "last_used", nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "LastUsed", table = "LoginInfo", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     public Date getLastUsed() {
         return lastUsed;
@@ -59,7 +73,8 @@ public class LoginInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LoginInfo loginInfo = (LoginInfo) o;
-        return Objects.equals(userName, loginInfo.userName) &&
+        return id == loginInfo.id &&
+                Objects.equals(username, loginInfo.username) &&
                 Objects.equals(series, loginInfo.series) &&
                 Objects.equals(token, loginInfo.token) &&
                 Objects.equals(lastUsed, loginInfo.lastUsed);
@@ -67,6 +82,6 @@ public class LoginInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName, series, token, lastUsed);
+        return Objects.hash(id, username, series, token, lastUsed);
     }
 }

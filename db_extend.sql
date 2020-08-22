@@ -101,6 +101,13 @@ CREATE TABLE `products` (
 
 /*Data for the table `products` */
 
+create table `product_categories`(
+	`id` bigint(20) NOT NULL,
+	`name` varchar(120) CHARACTER SET utf8mb4 DEFAULT NULL,
+	`description` varchar(256) CHARACTER SET utf8mb4 DEFAULT NULL,
+	PRIMARY KEY (`id`)
+);
+
 /*Table structure for table `purchased_products` */
 
 DROP TABLE IF EXISTS `purchased_products`;

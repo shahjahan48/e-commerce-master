@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
@@ -27,12 +28,14 @@ import javax.sql.DataSource;
 @ComponentScan({ "com.productheaven.config" })
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
-//    private final PersistentTokenRepository tokenRepository;
-//    private final DataSource dataSource;
+    private final PersistentTokenRepository tokenRepository;
+    private final DataSource dataSource;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService) {
+    public SecurityConfig(UserDetailsService userDetailsService, PersistentTokenRepository tokenRepository, DataSource dataSource) {
         this.userDetailsService = userDetailsService;
+        this.tokenRepository = tokenRepository;
+        this.dataSource = dataSource;
     }
 
     @Autowired
@@ -65,10 +68,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(authenticationSuccessHandler())
                 .failureHandler(authenticationFailureHandler())
 //                .usernameParameter("username").passwordParameter("password")
-                .and()
+//                .and()
 //                .rememberMe().rememberMeParameter("remember-me").tokenRepository(tokenRepository)
 //                .tokenValiditySeconds(86400)
-//                .and()
+                .and()
                 .csrf().and().exceptionHandling().accessDeniedPage("/Access_Denied");
     }
 
@@ -85,12 +88,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationProvider;
     }
 
-//    @Bean
-//    public PersistentTokenRepository tokenRepository() {
-//        JdbcTokenRepositoryImpl jdbcTokenRepositoryImpl=new JdbcTokenRepositoryImpl();
-//        jdbcTokenRepositoryImpl.setDataSource(dataSource);
-//        return jdbcTokenRepositoryImpl;
-//    }
+    @Bean
+    public PersistentTokenRepository tokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepositoryImpl=new JdbcTokenRepositoryImpl();
+        jdbcTokenRepositoryImpl.setDataSource(dataSource);
+        return jdbcTokenRepositoryImpl;
+    }
 
     @Bean
     public AuthenticationTrustResolver getAuthenticationTrustResolver() {

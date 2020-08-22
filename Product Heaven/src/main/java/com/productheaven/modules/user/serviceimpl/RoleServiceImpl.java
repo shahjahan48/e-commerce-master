@@ -1,15 +1,16 @@
 package com.productheaven.modules.user.serviceimpl;
 
 import com.productheaven.entities.Roles;
-import com.productheaven.entities.UserRoles;
 import com.productheaven.modules.user.dao.RolesDao;
 import com.productheaven.modules.user.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service("rolesService")
+@Transactional
 public class RoleServiceImpl implements RoleService {
     private final RolesDao rolesDao;
     @Autowired

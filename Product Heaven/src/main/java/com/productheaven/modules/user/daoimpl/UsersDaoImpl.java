@@ -9,7 +9,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository("usersDao")
-@Transactional
 public class UsersDaoImpl extends AbstractHibernateDao<Users, Long> implements UsersDao {
 
     public Users findById(long id) {
@@ -17,29 +16,35 @@ public class UsersDaoImpl extends AbstractHibernateDao<Users, Long> implements U
     }
 
     public Users findByUsername(String username) {
-        return findAll().stream().filter(x->x.getUserName().equals(username)).findAny().get();
+        List<Users> usersList=findAll();
+        if(usersList.size()==0)
+            return null;
+        return usersList.stream().filter(x->x.getUsername().equals(username)).findAny().get();
     }
 
     public Users findByEmailAddress(String email) {
-        return findAll().stream().filter(x->x.getEmailAddress().equals(email)).findAny().get();
+        List<Users> usersList=findAll();
+        if(usersList.size()==0)
+            return null;
+        return usersList.stream().filter(x->x.getEmailAddress().equals(email)).findAny().get();
     }
 
     public Users save(Users user) {
-        save(user);
+        create(user);
         return user;
     }
 
     public Users update(Users user){
-        update(user);
+        super.update(user);
         return user;
     }
 
     public void delete(Users user){
-        delete(user);
+        super.delete(user);
     }
 
     public void deleteById(long id){
-        deleteById(id);
+        super.deleteById(id);
     }
 
     public void deleteByEmail(String email) {

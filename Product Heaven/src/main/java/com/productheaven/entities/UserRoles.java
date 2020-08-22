@@ -2,19 +2,21 @@ package com.productheaven.entities;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
+import java.util.Objects;
 
 @Entity
-@Table(name = "user_roles", schema = "product_heaven")
 public class UserRoles {
     private long id;
-    private Timestamp createdDate;
+    private long userId;
+    private long roleId;
+    private Date createdDate;
     private Users user;
     private Roles role;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    @Column(name = "Id", table = "UserRoles", nullable = false)
     public long getId() {
         return id;
     }
@@ -24,32 +26,53 @@ public class UserRoles {
     }
 
     @Basic
-    @Column(name = "created_date", nullable = false)
-    public Timestamp getCreatedDate() {
+    @Column(name = "UserId", table = "UserRoles", nullable = false)
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    @Basic
+    @Column(name = "RoleId", table = "UserRoles", nullable = false)
+    public long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(long roleId) {
+        this.roleId = roleId;
+    }
+
+    @Basic
+    @Column(name = "CreatedDate", table = "UserRoles", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", updatable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="userId", nullable=false)
     public Users getUser() {
         return user;
     }
 
-    private void setUser(Users user) {
+    public void setUser(Users user) {
         this.user = user;
     }
 
-    @ManyToOne()
-    @JoinColumn(name = "role_id", updatable = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="roleId", nullable=false)
     public Roles getRole() {
         return role;
     }
 
-    private void setRole(Roles role) {
+    public void setRole(Roles role) {
         this.role = role;
     }
 
@@ -57,20 +80,15 @@ public class UserRoles {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         UserRoles userRoles = (UserRoles) o;
-
-        if (id != userRoles.id) return false;
-        if (createdDate != null ? !createdDate.equals(userRoles.createdDate) : userRoles.createdDate != null)
-            return false;
-
-        return true;
+        return id == userRoles.id &&
+                userId == userRoles.userId &&
+                roleId == userRoles.roleId &&
+                Objects.equals(createdDate, userRoles.createdDate);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
-        return result;
+        return Objects.hash(id, userId, roleId, createdDate);
     }
 }

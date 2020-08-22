@@ -5,8 +5,10 @@ import com.productheaven.modules.user.dao.LoginDao;
 import com.productheaven.modules.user.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("loginService")
+@Transactional
 public class LoginServiceImpl implements LoginService {
     private final LoginDao loginDao;
     @Autowired

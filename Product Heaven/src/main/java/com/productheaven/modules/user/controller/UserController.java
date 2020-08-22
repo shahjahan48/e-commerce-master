@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -61,9 +62,7 @@ public class UserController {
     @RequestMapping(value = { "/newuser" }, method = RequestMethod.GET)
     public String newUser(ModelMap model) {
         Users user = new Users();
-        List<Roles> roles = roleService.findAll();
         model.addAttribute("user", user);
-        model.addAttribute("roles", roles);
         model.addAttribute("edit", false);
         model.addAttribute("loggedinuser", getPrincipal());
         return "registration";
@@ -176,9 +175,10 @@ public class UserController {
      * If users is already logged-in and tries to goto login page again, will be redirected to list page.
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loginPage() {
+    public String loginPage(Model model) {
         if (isCurrentAuthenticationAnonymous()) {
-            return "login";
+            model.addAttribute("title", "Admin Login");
+            return "admin/admin-login";
         } else {
             return "redirect:/list";
         }
@@ -194,7 +194,7 @@ public class UserController {
         if (auth != null){
             String user_name = auth.getName();
             new SecurityContextLogoutHandler().logout(request, response, auth);
-            tokenRepository.removeUserTokens(user_name);
+//            tokenRepository.removeUserTokens(user_name);
             SecurityContextHolder.getContext().setAuthentication(null);
         }
         return "redirect:/login";

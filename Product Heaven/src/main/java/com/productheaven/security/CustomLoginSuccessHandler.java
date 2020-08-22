@@ -55,7 +55,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         if (isUser) {
             return "/home";
         } else if (isAdmin) {
-            return "/list";
+            return "/dashboard";
         } else {
             throw new IllegalStateException();
         }

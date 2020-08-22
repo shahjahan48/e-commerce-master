@@ -1,19 +1,16 @@
 package com.productheaven.modules.user.daoimpl;
 
 import com.productheaven.entities.Roles;
-import com.productheaven.entities.UserRoles;
 import com.productheaven.generics.AbstractHibernateDao;
 import com.productheaven.modules.user.dao.RolesDao;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository("rolesDao")
-@Transactional
 public class RolesDaoImpl extends AbstractHibernateDao<Roles, Long> implements RolesDao {
 
     public List<Roles> findAllRoles() {

@@ -14,7 +14,7 @@
 
 <body>
 	<div class="generic-container">
-		<%@include file="authheader.jsp" %>	
+		<%@include file="authentication.jsp" %>
 		<div class="panel panel-default">
 			  <!-- Default panel contents -->
 		  	<div class="panel-heading"><span class="lead">List of Users </span></div>
@@ -35,7 +35,7 @@
 	    		<tbody>
 				<c:forEach items="${users}" var="user">
 					<tr>
-						<td>${user.userName}</td>
+						<td>${user.username}</td>
 						<td>${user.emailAddress}</td>
 					    <sec:authorize access="hasRole('ADMIN') or hasRole('DBA')">
 							<td><a href="<c:url value='/edit-user-${user.emailAddress}' />" class="btn btn-success custom-width">edit</a></td>

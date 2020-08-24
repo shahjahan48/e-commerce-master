@@ -122,7 +122,7 @@
                 <!-- /.content -->
             </div>
             <!-- /.content-wrapper -->
-            <%@include file="footer.jsp"%>
+            <%@include file="shared/footer.jsp"%>
             <!-- Control Sidebar -->
 <%--            <aside class="control-sidebar control-sidebar-dark">--%>
 <%--                <!-- Control sidebar content goes here -->--%>

@@ -13,5 +13,5 @@ BEGIN
 	VALUES ('ADMIN', 'Admin', GETDATE()),
 		('BRANCH ADMIN', 'Branch Admin', GETDATE()),
 		('EMPLOYEE', 'Employee', GETDATE()),
-		('MEMBER', 'Member', GETDATE())
+		('CUSTOMER', 'Customer', GETDATE())
 END

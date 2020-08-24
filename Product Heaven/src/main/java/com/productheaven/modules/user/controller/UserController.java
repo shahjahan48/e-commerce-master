@@ -1,6 +1,7 @@
 package com.productheaven.modules.user.controller;
 
 import com.productheaven.entities.Roles;
+import com.productheaven.entities.UserRoles;
 import com.productheaven.entities.Users;
 import com.productheaven.modules.user.service.RoleService;
 import com.productheaven.modules.user.service.UserService;
@@ -22,8 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Controller
 public class UserController {
@@ -59,7 +59,7 @@ public class UserController {
     /**
      * This method will provide the medium to add a new user.
      */
-    @RequestMapping(value = { "/newuser" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/registration" }, method = RequestMethod.GET)
     public String newUser(ModelMap model) {
         Users user = new Users();
         model.addAttribute("user", user);
@@ -72,7 +72,7 @@ public class UserController {
      * This method will be called on form submission, handling POST request for
      * saving user in database. It also validates the user input
      */
-    @RequestMapping(value = { "/newuser" }, method = RequestMethod.POST)
+    @RequestMapping(value = { "/registration" }, method = RequestMethod.POST)
     public String saveUser(Users user, BindingResult result,
                            ModelMap model) {
 
@@ -93,7 +93,17 @@ public class UserController {
             result.addError(ssoError);
             return "registration";
         }
-
+        Set<UserRoles> userRoles = new HashSet<>();
+        UserRoles userRole=null;
+        for (Roles role: roleService.findAll()){
+            if(role.getRoleName().equalsIgnoreCase("CUSTOMER")){
+                userRole = new UserRoles();
+                userRole.setRoleId(role.getId());
+                userRole.setUserId(user.getId());
+                userRoles.add(userRole);
+            }
+        }
+        user.setUserRoles(userRoles);
         userService.saveUser(user);
 
         //model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " registered successfully");
@@ -177,8 +187,8 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage(Model model) {
         if (isCurrentAuthenticationAnonymous()) {
-            model.addAttribute("title", "Admin Login");
-            return "admin/admin-login";
+            model.addAttribute("title", "Login");
+            return "login";
         } else {
             return "redirect:/list";
         }

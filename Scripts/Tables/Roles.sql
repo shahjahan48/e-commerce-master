@@ -8,7 +8,6 @@ BEGIN
 
 		CONSTRAINT [PK_Roles] PRIMARY KEY(Id)
 	)
-
 	INSERT INTO Roles 
 	VALUES ('ADMIN', 'Admin', GETDATE()),
 		('BRANCH ADMIN', 'Branch Admin', GETDATE()),

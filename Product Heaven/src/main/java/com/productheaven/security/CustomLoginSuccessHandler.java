@@ -43,7 +43,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
+            if (grantedAuthority.getAuthority().equals("ROLE_CUSTOMER")) {
                 isUser = true;
                 break;
             } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
@@ -53,7 +53,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         }
 
         if (isUser) {
-            return "/home";
+            return "/dashboard";
         } else if (isAdmin) {
             return "/dashboard";
         } else {

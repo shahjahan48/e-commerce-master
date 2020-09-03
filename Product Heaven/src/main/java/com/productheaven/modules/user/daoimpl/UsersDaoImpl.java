@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository("usersDao")
 public class UsersDaoImpl extends AbstractHibernateDao<Users, Long> implements UsersDao {
@@ -15,18 +16,12 @@ public class UsersDaoImpl extends AbstractHibernateDao<Users, Long> implements U
         return findOne(id);
     }
 
-    public Users findByUsername(String username) {
-        List<Users> usersList=findAll();
-        if(usersList.size()==0)
-            return null;
-        return usersList.stream().filter(x->x.getUsername().equals(username)).findAny().get();
-    }
-
     public Users findByEmailAddress(String email) {
         List<Users> usersList=findAll();
-        if(usersList.size()==0)
+        Optional<Users> user = usersList.stream().filter(x->x.getEmailAddress().equals(email)).findFirst();
+        if(!user.isPresent())
             return null;
-        return usersList.stream().filter(x->x.getEmailAddress().equals(email)).findAny().get();
+        return user.get();
     }
 
     public Users save(Users user) {

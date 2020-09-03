@@ -17,25 +17,31 @@
 		<link rel="stylesheet" href="<c:url value="/assets/plugins/toastr/toastr.min.css" />">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="<c:url value="/assets/css/adminlte.min.css"/>">
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
 		<style type="text/css">
-
+			.login-page-remember-align {line-height: 38px;}
 		</style>
 	</head>
 
 	<body class="hold-transition login-page">
 		<div class="login-box">
 			<div class="login-logo">
-				<a href="javascript:void(0)"><b>JCOM</b>&nbsp;LOGIN</a>
+				<a href="javascript:void(0)"><b>LOGIN</b></a>
+<%--				<p>${}</p>--%>
 			</div>
 			<!-- /.login-logo -->
 			<div class="card">
 				<div class="card-body login-card-body">
-					<p class="login-box-msg">Sign in to Admin Panel</p>
+					<p class="login-box-msg">Sign in to System</p>
 					<form action="/login" method="post">
 						<c:if test="${param.error != null}">
 							<div class="alert alert-danger">
-								<p>Invalid username and password.</p>
+								<ul class="pl-3 mb-0">
+									<li>Invalid username and password</li>
+									<li>Account not activated yet</li>
+								</ul>
 							</div>
 						</c:if>
 						<c:if test="${param.logout != null}">
@@ -62,7 +68,7 @@
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<div class="row">
 							<div class="col-8">
-								<div class="icheck-primary">
+								<div class="icheck-primary login-page-remember-align">
 									<%--@declare id="remember-me"--%>
 									<input type="checkbox" id="rememberme" name="remember-me">
 									<label for="remember-me">
@@ -79,7 +85,7 @@
 					</form>
 
 					<div class="social-auth-links text-center mb-3">
-						<b>OR</b>
+						<p class="login-box-msg">Don't you have an account?</p>
 						<a href="javascript:void(0)" onclick="UnderConstruction();" class="btn btn-block btn-primary">
 							<i class="fab fa-facebook mr-2"></i> Sign in using Facebook
 						</a>

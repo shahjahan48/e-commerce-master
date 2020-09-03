@@ -3,78 +3,113 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>JCOM | ${title}</title>
+		<!-- Tell the browser to be responsive to screen width -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>User Registration Form</title>
-	<link href="<c:url value='/assets/css/bootstrap.css' />" rel="stylesheet"></link>
-	<link href="<c:url value='/assets/css/app.css' />" rel="stylesheet"></link>
-</head>
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="<c:url value="/assets/plugins/fontawesome-free/css/all.min.css" />">
+		<!-- Ionicons -->
+		<link rel="stylesheet" href="<c:url value="/assets/css/ionicons.min.css" />">
+		<!-- SweetAlert2 -->
+		<link rel="stylesheet" href="<c:url value="/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" />">
+		<!-- Toastr -->
+		<link rel="stylesheet" href="<c:url value="/assets/plugins/toastr/toastr.min.css" />">
+		<!-- Theme style -->
+		<link rel="stylesheet" href="<c:url value="/assets/css/adminlte.min.css"/>">
+		<!-- Custom style -->
+		<link rel="stylesheet" href="<c:url value="/assets/css/style.css"/>">
+		<!-- Google Font: Source Sans Pro -->
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+	</head>
 
-<body>
- 	<div class="generic-container">
+	<body class="hold-transition register-page">
 		<%@include file="authentication.jsp" %>
+		<div class="register-box">
+			<div class="register-logo">
+				<a href="javascript:void(0)"><b>REGISTER</b></a>
+			</div>
 
-		<div class="well lead">User Registration Form</div>
-	 	<%--@elvariable id="user" type="com.productheaven.entities"--%>
-	 	<form:form method="POST" modelAttribute="user" class="form-horizontal">
-			<form:input type="hidden" path="id" id="id"/>
+			<div class="card">
+				<div class="card-body register-card-body">
+					<p class="login-box-msg">Register a new membership</p>
 
-			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="col-md-3 control-lable" for="username">Username</label>
-					<div class="col-md-7">
-						<c:choose>
-							<c:when test="${edit}">
-								<form:input type="text" path="username" id="username" class="form-control input-sm" disabled="true"/>
-							</c:when>
-							<c:otherwise>
-								<form:input type="text" path="username" id="username" class="form-control input-sm" />
-								<div class="has-error">
-									<form:errors path="username" class="help-inline"/>
+					<%--@elvariable id="user" type="model"--%>
+					<form:form action="/registration" modelAttribute="user" method="post" onsubmit="return ValidateRegister();">
+                        <form:errors path="*" cssClass="error-content" element="div"/>
+						<form:input type="hidden" path="id"/>
+						<div class="input-group">
+							<form:input path="emailAddress" type="text" class="form-control" placeholder="Email"/>
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-envelope"></span>
 								</div>
-							</c:otherwise>
-						</c:choose>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="col-md-3 control-lable" for="password">Password</label>
-					<div class="col-md-7">
-						<form:input type="password" path="password" id="password" class="form-control input-sm" />
-						<div class="has-error">
-							<form:errors path="password" class="help-inline"/>
+							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="col-md-3 control-lable" for="emailAddress">Email</label>
-					<div class="col-md-7">
-						<form:input type="text" path="emailAddress" id="emailAddress" class="form-control input-sm" />
-						<div class="has-error">
-							<form:errors path="emailAddress" class="help-inline"/>
+						<p id="emailError" class="text-danger mt-1 font-80 hide"></p>
+						<div class="input-group">
+							<form:input path="password" type="password" class="form-control" placeholder="Password"/>
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-lock"></span>
+								</div>
+							</div>
 						</div>
-					</div>
+						<p id="passwordError" class="text-danger mt-1 font-80 hide"></p>
+						<div class="input-group">
+							<input type="password" class="form-control" placeholder="Retype password" id="confirmPassword">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-lock"></span>
+								</div>
+							</div>
+						</div>
+						<p id="rePasswordError" class="text-danger mt-1 font-80 hide"></p>
+						<div class="input-group">
+							<form:input path="firstName" type="text" class="form-control" placeholder="First Name"/>
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-user"></span>
+								</div>
+							</div>
+						</div>
+						<p id="firstNameError" class="text-danger mt-1 font-80 hide"></p>
+						<div class="input-group mb-3">
+							<form:input path="lastName" type="text" class="form-control" placeholder="Last Name"/>
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-user"></span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-4 offset-4">
+								<button type="submit" class="btn btn-primary btn-block">Register</button>
+							</div>
+							<!-- /.col -->
+						</div>
+					</form:form>
+
+					<a href="/login" class="text-center">I already have a membership</a>
 				</div>
-			</div>
-			<div class="row">
-				<div class="form-actions floatRight">
-					<c:choose>
-						<c:when test="${edit}">
-							<input type="submit" value="Update" class="btn btn-primary btn-sm"/> or <a href="<c:url value='/list' />">Cancel</a>
-						</c:when>
-						<c:otherwise>
-							<input type="submit" value="Register" class="btn btn-primary btn-sm"/> or <a href="<c:url value='/list' />">Cancel</a>
-						</c:otherwise>
-					</c:choose>
-				</div>
-			</div>
-		</form:form>
-	</div>
-</body>
+				<!-- /.form-box -->
+			</div><!-- /.card -->
+		</div>
+		<!-- /.register-box -->
+		<!-- jQuery -->
+		<script src="<c:url value="/assets/plugins/jquery/jquery.min.js" />"></script>
+		<!-- Bootstrap 4 -->
+		<script src="<c:url value="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js" />"></script>
+		<!-- SweetAlert2 -->
+		<script src="<c:url value="/assets/plugins/sweetalert2/sweetalert2.min.js" />"></script>
+		<!-- Toastr -->
+		<script src="<c:url value="/assets/plugins/toastr/toastr.min.js" />"></script>
+		<!-- AdminLTE App -->
+		<script src="<c:url value="/assets/js/adminlte.js" />"></script>
+		<!-- User registration functions -->
+		<script src="<c:url value="/assets/js/app/user_registration.js" />"></script>
+	</body>
 </html>

@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().loginPage("/login")
                 .loginProcessingUrl("/login")
                 .successHandler(authenticationSuccessHandler())
-                .failureHandler(authenticationFailureHandler())
+//                .failureHandler(authenticationFailureHandler())
 //                .usernameParameter("username").passwordParameter("password")
 //                .and()
 //                .rememberMe().rememberMeParameter("remember-me").tokenRepository(tokenRepository)

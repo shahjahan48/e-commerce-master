@@ -7,8 +7,6 @@ import java.util.List;
 public interface UsersDao {
     Users findById(long id);
 
-    Users findByUsername(String username);
-
     Users findByEmailAddress(String email);
 
     Users save(Users user);

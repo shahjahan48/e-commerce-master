@@ -11,9 +11,10 @@ import java.util.Set;
 @Entity
 public class Users {
     private long id;
-    private String username;
-    private String password;
     private String emailAddress;
+    private String password;
+    private String firstName;
+    private String lastName;
     private Date createdDate;
     private boolean isActive;
     private Set<UserRoles> userRoles;
@@ -30,14 +31,13 @@ public class Users {
     }
 
     @Basic
-    @Column(name = "Username", table = "Users", nullable = false, length = 128)
-    @Nationalized
-    public String getUsername() {
-        return username;
+    @Column(name = "EmailAddress", table = "Users", nullable = false, length = 64)
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     @Basic
@@ -52,16 +52,6 @@ public class Users {
     }
 
     @Basic
-    @Column(name = "EmailAddress", table = "Users", nullable = false, length = 64)
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    @Basic
     @Column(name = "CreatedDate", table = "Users", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     public Date getCreatedDate() {
@@ -70,6 +60,28 @@ public class Users {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    @Basic
+    @Column(name = "FirstName", table = "Users", nullable = false)
+    @Nationalized
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Basic
+    @Column(name = "LastName", table = "Users")
+    @Nationalized
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Basic
@@ -97,14 +109,15 @@ public class Users {
         Users users = (Users) o;
         return id == users.id &&
                 isActive == users.isActive &&
-                Objects.equals(username, users.username) &&
-                Objects.equals(password, users.password) &&
                 Objects.equals(emailAddress, users.emailAddress) &&
-                Objects.equals(createdDate, users.createdDate);
+                Objects.equals(password, users.password) &&
+                Objects.equals(createdDate, users.createdDate) &&
+                Objects.equals(firstName, users.firstName) &&
+                Objects.equals(lastName, users.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, emailAddress, createdDate, isActive);
+        return Objects.hash(id, emailAddress, password, firstName, lastName, createdDate, isActive);
     }
 }

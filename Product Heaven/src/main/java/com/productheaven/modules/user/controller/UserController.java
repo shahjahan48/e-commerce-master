@@ -63,8 +63,7 @@ public class UserController {
     public String newUser(ModelMap model) {
         Users user = new Users();
         model.addAttribute("user", user);
-        model.addAttribute("edit", false);
-        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("title", "Register");
         return "registration";
     }
 
@@ -107,7 +106,9 @@ public class UserController {
         userService.saveUser(user);
 
         //model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " registered successfully");
+        String userName = getPrincipal();
         model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("title", "Registration");
         //return "success";
         return "registrationsuccess";
     }

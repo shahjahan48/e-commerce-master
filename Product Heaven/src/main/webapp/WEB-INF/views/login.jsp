@@ -36,11 +36,10 @@
 				<div class="card-body login-card-body">
 					<p class="login-box-msg">Sign in to System</p>
 					<form action="/login" method="post">
-						<c:if test="${param.error != null}">
+						<c:if test="${errorMessage != null}">
 							<div class="alert alert-danger">
 								<ul class="pl-3 mb-0">
-									<li>Invalid username and password</li>
-									<li>Account not activated yet</li>
+									<li>${errorMessage}</li>
 								</ul>
 							</div>
 						</c:if>

@@ -5,13 +5,16 @@ import com.productheaven.entities.UserRoles;
 import com.productheaven.entities.Users;
 import com.productheaven.modules.user.service.RoleService;
 import com.productheaven.modules.user.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Controller;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
@@ -88,7 +92,7 @@ public class UserController {
          *
          */
         if(!userService.isUserEmailUnique(user.getId(), user.getEmailAddress())){
-            FieldError ssoError =new FieldError("user","email",messageSource.getMessage("non.unique.email", new String[]{user.getEmailAddress()}, Locale.getDefault()));
+            FieldError ssoError =new FieldError("user","email", "Email already associated with an account");
             result.addError(ssoError);
             return "registration";
         }
@@ -191,10 +195,26 @@ public class UserController {
             model.addAttribute("title", "Login");
             return "login";
         } else {
-            return "redirect:/list";
+            return "/dashboard";
         }
     }
 
+    @GetMapping("/login-error")
+    public String login(HttpServletRequest request, Model model){
+        HttpSession session = request.getSession(false);
+        String errorMessage = null;
+        if (session != null) {
+            AuthenticationException ex = (AuthenticationException) session
+                    .getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+            if (ex != null) {
+                errorMessage = ex.getMessage();
+            }
+        }
+        errorMessage = errorMessage==null?"Invalid Email Address": errorMessage;
+        model.addAttribute("errorMessage", errorMessage);
+        model.addAttribute("title", "Login");
+        return "login";
+    }
     /**
      * This method handles logout requests.
      * Toggle the handlers if you are RememberMe functionality is useless in your app.
